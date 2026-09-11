@@ -43,6 +43,24 @@ Confirm your local MySQL server is up and that the user in `application-dev.prop
 
 ### 4. Run the application
 
+Using the Maven wrapper (recommended, no local Maven install required):
+
+```bash
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+Or if you have Maven installed globally:
+
+```bash
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+The app starts on `http://localhost:8080` by default. Confirm it's up by hitting the health check endpoint:
+
+```bash
+curl http://localhost:8080/health
+```
+
 ## Project Structure
 
 ```
@@ -57,3 +75,7 @@ src/main/java/africa/semicolon/habitTracker/
 
 - `spring.jpa.hibernate.ddl-auto=create-drop` is set for local development — this drops and recreates the schema on every run/shutdown. Do **not** carry this setting into a production profile.
 - If you see a `Repository not found` error while pushing, check that you're authenticated with a GitHub account that has access to this (private) repo — a Personal Access Token or SSH key is required for HTTPS/SSH pushes.
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the branching strategy, commit message conventions, and PR process.
