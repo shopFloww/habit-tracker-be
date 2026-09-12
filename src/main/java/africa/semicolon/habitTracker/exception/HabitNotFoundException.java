@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class HabitNotFoundException extends HabitTracker {
+public class HabitNotFoundException extends RuntimeException {
     public HabitNotFoundException(Long habitId) {
         super("Habit with id " + habitId + " not found");
     }
