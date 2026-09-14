@@ -1,6 +1,6 @@
 package africa.semicolon.habitTracker.dto.response;
 
-public class userResponse {
+public class UserResponse {
 
 
 
