@@ -19,14 +19,17 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserResponse createUser(CreateUserRequest request){
+    public UserResponse createUser(CreateUserRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateEmailException("Email already exists: " + request.getEmail());
         }
 
-        try {
+
             User user = new User();
+            user.setName(request.getUsername());
+            user.setEmail(request.getEmail());
+
             User saved = userRepository.save(user);
 
             return new UserResponse(
@@ -35,18 +38,11 @@ public class UserService {
                     saved.getEmail()
             );
 
-        }
-
-        catch (DataIntegrityViolationException ex) {
-            throw new DuplicateEmailException(
-                    "Email already exists: " + request.getEmail()
-            );
-        }
     }
 
 
     @Transactional
-    public UserResponse getUserById(Long id) {
+    public UserResponse getUserById(String id) {
         return userRepository.findById(id)
                 .map(user -> new UserResponse(user.getUserId(), user.getName(), user.getEmail()))
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
