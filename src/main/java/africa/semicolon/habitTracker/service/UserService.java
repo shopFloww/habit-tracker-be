@@ -11,33 +11,57 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserResponse createUser(CreateUserRequest request) {
-        if (userRepository.existsByEmail(request.email())) {
-            throw new DuplicateEmailException("Email already exists: " + request.email());
+    public UserResponse createUser(CreateUserRequest request){
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new DuplicateEmailException("Email already exists: " + request.getEmail());
         }
 
         try {
-            User user = new User(request.name(), request.email());
+            User user = new User();
             User saved = userRepository.save(user);
-            return new UserResponse(saved.getId(), saved.getName(), saved.getEmail());
-        } catch (DataIntegrityViolationException ex) {
-            throw new DuplicateEmailException("Email already exists: " + request.email());
+
+            return new UserResponse(
+                    saved.getUserId(),
+                    saved.getName(),
+                    saved.getEmail()
+            );
+
+        }
+
+        catch (DataIntegrityViolationException ex) {
+            throw new DuplicateEmailException(
+                    "Email already exists: " + request.getEmail()
+            );
         }
     }
 
 
-    @Transactional(readOnly = true)
+    @Transactional
     public UserResponse getUserById(Long id) {
         return userRepository.findById(id)
-                .map(user -> new UserResponse(user.getId(), user.getName(), user.getEmail()))
+                .map(user -> new UserResponse(user.getUserId(), user.getName(), user.getEmail()))
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
 
 
+    @Transactional
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(user -> new UserResponse(
+                        user.getUserId(),
+                        user.getName(),
+                        user.getEmail()
+                ))
+                .toList();
+    }
 }

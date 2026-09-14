@@ -1,14 +1,15 @@
 package africa.semicolon.habitTracker.model;
 
-
-import javax.annotation.processing.Generated;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
 @Entity
-
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.UUID)
@@ -24,11 +25,6 @@ public class User {
     @NotBlank
     @Email
     private String email;
-
-
-
-
-
 
 
 }
