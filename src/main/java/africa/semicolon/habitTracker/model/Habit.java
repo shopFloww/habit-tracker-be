@@ -4,19 +4,31 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "habits")
 public class Habit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
     private String description;
 
-    private String type;
+    @OneToMany(mappedBy = "habit", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HabitLog> logs = new ArrayList<>();
+
+    public Habit() {
+    }
+
+    public Habit(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
     public Long getId() {
         return id;
@@ -24,6 +36,14 @@ public class Habit {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -34,11 +54,11 @@ public class Habit {
         this.description = description;
     }
 
-    public String getType() {
-        return type;
+    public List<HabitLog> getLogs() {
+        return logs;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setLogs(List<HabitLog> logs) {
+        this.logs = logs;
     }
 }
