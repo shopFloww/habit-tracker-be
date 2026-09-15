@@ -4,6 +4,8 @@ import africa.semicolon.habitTracker.dtos.HabitRequestDto;
 import africa.semicolon.habitTracker.exception.HabitNotFoundException;
 import africa.semicolon.habitTracker.model.Habit;
 import africa.semicolon.habitTracker.repository.HabitRepository;
+import africa.semicolon.habitTracker.repository.UserRepository;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
