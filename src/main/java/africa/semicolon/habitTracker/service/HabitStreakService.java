@@ -17,33 +17,32 @@ public class HabitStreakService {
         return calculateCurrentStreak(habitId, LocalDate.now());
     }
 
-    int calculateCurrentStreak(Long habitId, LocalDate today) {
-        List<LocalDate> logDates = habitLogRepository.findLogDatesByHabitIdOrderByLogDateDesc(habitId);
+    public int calculateCurrentStreak(Long habitId, LocalDate today) {
+        List<LocalDate> logDates =
+                habitLogRepository.findLogDatesByHabitIdOrderByLogDateDesc(habitId);
 
-        if (logDates.isEmpty()) {
+        if (logDates.isEmpty() || isStreakBroken(logDates.get(0), today)) {
             return 0;
         }
+        return countConsecutiveDays(logDates);
+    }
 
-        LocalDate mostRecent = logDates.get(0);
-        LocalDate yesterday = today.minusDays(1);
+    private boolean isStreakBroken(LocalDate mostRecentLog, LocalDate today) {
+        return mostRecentLog.isBefore(today.minusDays(1));
+    }
 
-        if (mostRecent.isBefore(yesterday)) {
-            return 0;
-        }
-
+    private int countConsecutiveDays(List<LocalDate> logDates) {
         int streak = 1;
-        LocalDate expected = mostRecent.minusDays(1);
+        LocalDate expected = logDates.get(0).minusDays(1);
 
-        for (int streakCounter = 1; streakCounter < logDates.size(); streakCounter++) {
-            LocalDate current = logDates.get(streakCounter);
-            if (current.equals(expected)) {
+        for (LocalDate date : logDates.subList(1, logDates.size())) {
+            if (date.equals(expected)) {
                 streak++;
                 expected = expected.minusDays(1);
-            } else if (current.isBefore(expected)) {
+            } else if (date.isBefore(expected)) {
                 break;
             }
         }
-
         return streak;
     }
 }
