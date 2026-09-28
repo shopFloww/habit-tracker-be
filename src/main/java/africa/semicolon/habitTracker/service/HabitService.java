@@ -6,9 +6,10 @@ import africa.semicolon.habitTracker.model.Habit;
 import java.util.List;
 
 public interface HabitService {
-    List<Habit> findAllHabits(Long userId);
 
-    Habit createHabit(HabitRequestDto habitRequestDto, Long userId);
+    List<Habit> findAllHabits(String userId);
+
+    Habit createHabit(HabitRequestDto habitRequestDto, String userId);
 
     Habit findHabitById(Long id);
 }

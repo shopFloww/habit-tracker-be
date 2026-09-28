@@ -1,45 +1,35 @@
 package africa.semicolon.habitTracker.controller;
 
-import africa.semicolon.habitTracker.dtos.HabitRequestDto;
-import africa.semicolon.habitTracker.dtos.HabitResponseDto;
-import africa.semicolon.habitTracker.model.Habit;
+import africa.semicolon.habitTracker.dto.request.CreateUserRequest;
+import africa.semicolon.habitTracker.dto.response.userResponse;
 import africa.semicolon.habitTracker.service.HabitService;
-import africa.semicolon.habitTracker.service.HabitServiceImpl;
-import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.lang.reflect.Type;
-import java.util.List;
-
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@AllArgsConstructor
+@RequestMapping("/api/users")
+@RequiredArgsConstructor
+
 public class HabitController {
 
-    private final HabitService habitService;
-    private final ModelMapper modelMapper;
 
+    private HabitService habitService;
 
-    @GetMapping("/users/{userId}/habits")
-    public ResponseEntity<List<HabitResponseDto>> findAllHabitsByUserId(@PathVariable Long userId) {
-        List <Habit> habits = habitService.findAllHabits(userId);
-        Type type = new TypeToken<List<HabitResponseDto>>(){}.getType();
-        return ResponseEntity.ok(modelMapper.map(habits, type));
-    }
+    @PostMapping
+    public ResponseEntity<userResponse> createUser(@RequestBody CreateUserRequest request){
 
-    @GetMapping("/habits/{id}")
-    public ResponseEntity<HabitResponseDto> findById(@PathVariable Long id){
-        Habit habit = habitService.findHabitById(id);
-        return ResponseEntity.ok(modelMapper.map(habit, HabitResponseDto.class));
-    }
+        userResponse response = new userResponse();
+        return  ResponseEntity.status(HttpStatus.CREATED).body(response);
 
-    @PostMapping("/users/{userId}/habits")
-    public ResponseEntity<HabitResponseDto> createHabit(@RequestBody HabitRequestDto habitRequestDto, @PathVariable Long userId){
-        Habit habit = habitService.createHabit(habitRequestDto, userId);
-        return ResponseEntity.ok(modelMapper.map(habit, HabitResponseDto.class));
     }
 }
+
+
+
+
+

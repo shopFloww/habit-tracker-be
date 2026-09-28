@@ -1,6 +1,16 @@
 package africa.semicolon.habitTracker.model;
 
+import jakarta.persistence.*;
+import lombok.*;
 
+import java.time.LocalDateTime;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Habit {
 
     @Id
@@ -16,5 +26,4 @@ public class Habit {
     private LocalDateTime created_at = LocalDateTime.now();
 
     private String description;
-
-    }
+}

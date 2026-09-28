@@ -9,7 +9,6 @@ import africa.semicolon.habitTracker.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,26 +18,25 @@ public class HabitServiceImpl implements HabitService {
     private final HabitRepository habitRepository;
     private final UserRepository userRepository;
 
-
     @Override
-    public List<Habit> findAllHabits(Long userId) {
-        return habitRepository.findAllByUser_id(userId);
+    public List<Habit> findAllHabits(String userId) {
+        return habitRepository.findAllByUser_userId(userId);
     }
 
     @Override
-    public Habit createHabit(HabitRequestDto habitRequestDto, Long userId) {
+    public Habit createHabit(HabitRequestDto habitRequestDto, String userId) {
         Habit habit = Habit.builder()
-                .user(userRepository.findById(userId))
+                .user(userRepository.findById(userId).orElseThrow())
                 .name(habitRequestDto.getName())
                 .description(habitRequestDto.getDescription())
                 .build();
-        habitRepository.save(habit);
-        return habit;
+
+        return habitRepository.save(habit);
     }
 
     @Override
     public Habit findHabitById(Long id) {
-        return habitRepository.findById(id).orElseThrow(()-> new HabitNotFoundException("Habit not found"));
+        return habitRepository.findById(id)
+                .orElseThrow(() -> new HabitNotFoundException("Habit not found"));
     }
-
 }
