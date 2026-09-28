@@ -1,7 +1,6 @@
 package africa.semicolon.habitTracker.dtos;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.ManyToOne;
+import africa.semicolon.habitTracker.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
